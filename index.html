@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planeaciones EPC - I.E. La Pascuala</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2d3561 0%, #4a5899 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .form-section {
+            margin-bottom: 30px;
+        }
+
+        .form-section h2 {
+            color: #2d3561;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: 600;
+            color: #2d3561;
+            margin-bottom: 8px;
+            font-size: 0.95em;
+        }
+
+        input, select, textarea {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: all 0.3s;
+            font-family: inherit;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .resultado {
+            display: none;
+            margin-top: 40px;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid #667eea;
+        }
+
+        .resultado.mostrar {
+            display: block;
+        }
+
+        .resultado-contenido {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            line-height: 1.8;
+        }
+
+        .resultado-contenido h2 {
+            color: #2d3561;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .resultado-contenido h3 {
+            color: #4a5899;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        .resultado-contenido table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+        }
+
+        .resultado-contenido th {
+            background: #667eea;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        .resultado-contenido td {
+            padding: 8px;
+            border: 1px solid #e0e0e0;
+        }
+
+        .resultado-contenido tr:nth-child(even) {
+            background: #f8f9fa;
+        }
+
+        .resultado-contenido ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .resultado-contenido li {
+            margin-bottom: 8px;
+        }
+
+        .resultado-contenido img {
+            width: 100px;
+            height: 100px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .botones-accion {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .btn-secondary {
+            background: #28a745;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+
+        .btn-warning {
+            background: #dc3545;
+        }
+
+        .btn-warning:hover {
+            background: #c82333;
+        }
+
+        .btn-info {
+            background: #17a2b8;
+        }
+
+        .btn-info:hover {
+            background: #138496;
+        }
+
+        .btn-dark {
+            background: #6c757d;
+        }
+
+        .btn-dark:hover {
+            background: #5a6268;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            background: #d1ecf1;
+            border-left: 4px solid #0c5460;
+            color: #0c5460;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+            }
+            .header, .form-section, .botones-accion, .btn, .alert {
+                display: none !important;
+            }
+            .resultado {
+                display: block !important;
+                border: none;
+                padding: 0;
+                background: white;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📚 Generador de Planeaciones EPC</h1>
+            <p>Institución Educativa La Pascuala - Tecnología e Informática</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">Modelo de Enseñanza para la Comprensión (David Perkins)</p>
+        </div>
+
+        <div class="content">
+            <div class="alert">
+                <strong>💡 Instrucción:</strong> Complete todos los campos del formulario. La aplicación generará automáticamente una planeación completa siguiendo el modelo EPC.
+                <br><br>
+                <strong>🤖 IA Opcional:</strong> Si deseas usar Claude AI para generar contenido más personalizado y creativo, ingresa tu API Key de Anthropic abajo.
+                <br>
+                <small>Obtén tu API Key en: <a href="https://console.anthropic.com/" target="_blank">console.anthropic.com</a></small>
+            </div>
+
+            <div class="form-section">
+                <h2>🤖 Configuración de IA (Opcional)</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="apiKey">API Key de Anthropic (opcional)</label>
+                        <input type="password" id="apiKey" placeholder="sk-ant-...">
+                        <small style="color: #666; margin-top: 5px;">Tu API Key se guarda solo en tu navegador y nunca se envía a ningún servidor externo.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="usarIA">Modo de Generación</label>
+                        <select id="usarIA">
+                            <option value="con-ia">Con IA (Claude Sonnet 4 - Más personalizado)</option>
+                            <option value="sin-ia">Sin IA (Plantillas predefinidas - Rápido)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>📋 Datos Básicos</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="tema">Tema de la Unidad *</label>
+                        <input type="text" id="tema" placeholder="Ej: La evolución del celular">
+                    </div>
+                    <div class="form-group">
+                        <label for="grado">Grado *</label>
+                        <select id="grado">
+                            <option value="">Seleccione...</option>
+                            <option value="6°">6° - Sexto</option>
+                            <option value="7°">7° - Séptimo</option>
+                            <option value="8°">8° - Octavo</option>
+                            <option value="9°">9° - Noveno</option>
+                            <option value="10°">10° - Décimo</option>
+                            <option value="11°">11° - Once</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="duracion">Duración (horas) *</label>
+                        <input type="number" id="duracion" min="1" max="20" placeholder="Ej: 2">
+                    </div>
+                    <div class="form-group">
+                        <label for="periodo">Periodo *</label>
+                        <select id="periodo">
+                            <option value="">Seleccione...</option>
+                            <option value="1">Primer Periodo</option>
+                            <option value="2">Segundo Periodo</option>
+                            <option value="3">Tercer Periodo</option>
+                            <option value="4">Cuarto Periodo</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edadPromedio">Edad Promedio *</label>
+                        <input type="number" id="edadPromedio" min="5" max="20" placeholder="Ej: 12">
+                    </div>
+                    <div class="form-group">
+                        <label for="numeroSecuencia">Número de Secuencia *</label>
+                        <input type="number" id="numeroSecuencia" min="1" max="20" placeholder="De 1 a 20">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h2>🎯 Competencias Transversales</h2>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label for="compLaboral">Competencia Laboral *</label>
+                        <textarea id="compLaboral" rows="4" placeholder="Ej: Trabajo en equipo&#10;- Responsabilidad&#10;- Liderazgo"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="compCiudadana">Competencia Ciudadana *</label>
+                        <textarea id="compCiudadana" rows="4" placeholder="Ej: Respeto por la opinión&#10;- Participación democrática&#10;- Convivencia pacífica"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="compSocioemocional">Competencia Socioemocional *</label>
+                        <textarea id="compSocioemocional" rows="4" placeholder="Ej: Manejo de la frustración&#10;- Empatía&#10;- Autorregulación emocional"></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <button class="btn" onclick="generarPlaneacion()">✨ Generar Planeación Completa</button>
+
+            <div id="resultado" class="resultado">
+                <div class="botones-accion">
+                    <button onclick="descargarWord()" class="btn-secondary">📄 Descargar Word</button>
+                    <button onclick="descargarPDF()" class="btn-secondary btn-warning">📕 Descargar PDF</button>
+                    <button onclick="window.print()" class="btn-secondary btn-info">🖨️ Imprimir</button>
+                    <button onclick="copiar()" class="btn-secondary btn-dark">📋 Copiar</button>
+                    <button onclick="nuevo()" class="btn-secondary btn-dark">🔄 Nueva</button>
+                </div>
+                <div id="contenido" class="resultado-contenido"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cargar jsPDF para generar PDFs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        // Guardar y cargar API Key del localStorage
+        function guardarApiKey(key) {
+            if (key) {
+                localStorage.setItem('anthropic_api_key', key);
+            }
+        }
+
+        function cargarApiKey() {
+            const key = localStorage.getItem('anthropic_api_key');
+            if (key) {
+                document.getElementById('apiKey').value = key;
+            }
+        }
+
+        // Cargar API Key al iniciar
+        window.addEventListener('DOMContentLoaded', cargarApiKey);
+
+        // Función para llamar a Claude API
+        async function generarConClaudeIA(tema, grado, duracion, edadPromedio, numeroSecuencia) {
+            const apiKey = document.getElementById('apiKey').value;
+            
+            if (!apiKey) {
+                alert('⚠️ Por favor ingresa tu API Key de Anthropic para usar Claude IA');
+                return null;
+            }
+
+            // Guardar API Key
+            guardarApiKey(apiKey);
+
+            const prompt = `Eres un experto en pedagogía y planeación educativa de la Institución Educativa La Pascuala. Tu especialidad es el modelo de "Enseñanza para la Comprensión" (EPC) de David Perkins aplicado al área de Tecnología e Informática.
+
+CONTEXTO:
+- Institución: I.E. La Pascuala (contexto de alta vulnerabilidad, recursos tecnológicos limitados)
+- Tema: ${tema}
+- Grado: ${grado}
+- Duración: ${duracion} horas
+- Edad promedio: ${edadPromedio} años
+- Número de secuencia: ${numeroSecuencia}
+
+TAREA:
+Genera contenido pedagógico creativo y específico para esta planeación:
+
+1. TÓPICO GENERATIVO:
+   - Un título sugerente y motivador
+   - Una pregunta esencial que despierte curiosidad
+
+2. METAS DE COMPRENSIÓN (4 metas que empiecen con "Que el estudiante comprenda...")
+
+3. SECUENCIA DIDÁCTICA - FASE DE INVESTIGACIÓN GUIADA:
+   - 3 actividades detalladas y creativas
+   - Cada actividad debe tener: nombre, descripción, pasos específicos, recursos necesarios
+   - Adaptadas al contexto de La Pascuala (recursos limitados)
+
+Responde SOLO en formato JSON:
+{
+  "topicoTitulo": "...",
+  "topicooPregunta": "...",
+  "metas": ["...", "...", "...", "..."],
+  "actividades": [
+    {
+      "nombre": "...",
+      "descripcion": "...",
+      "pasos": ["...", "...", "..."],
+      "recursos": "..."
+    }
+  ]
+}`;
+
+            try {
+                // Llamar a nuestra API serverless en Vercel (evita CORS)
+                const response = await fetch('/api/claude', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        apiKey: apiKey,
+                        prompt: prompt
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(error.error?.message || error.error || 'Error en la API');
+                }
+
+                const data = await response.json();
+                const contenidoIA = data.content[0].text;
+                
+                // Limpiar el JSON si viene con markdown
+                const jsonLimpio = contenidoIA.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
+                return JSON.parse(jsonLimpio);
+                
+            } catch (error) {
+                console.error('Error al llamar a Claude:', error);
+                alert('❌ Error al conectar con Claude IA: ' + error.message + '\n\nVerifica tu API Key o usa el modo sin IA.');
+                return null;
+            }
+        }
+
+        function formatearCompetencia(texto) {
+            if (!texto) return '';
+            
+            // Reemplazar guiones y asteriscos por saltos de línea
+            var lineas = texto.split(/[\n\r]+/);
+            var resultado = '<ul style="margin: 0; padding-left: 20px;">';
+            
+            for (var i = 0; i < lineas.length; i++) {
+                var linea = lineas[i].trim();
+                if (linea) {
+                    // Quitar guiones o asteriscos al inicio
+                    linea = linea.replace(/^[-*•]\s*/, '');
+                    if (linea) {
+                        resultado += '<li>' + linea + '</li>';
+                    }
+                }
+            }
+            
+            resultado += '</ul>';
+            return resultado;
+        }
+
+        async function generarPlaneacion() {
+            var tema = document.getElementById('tema').value;
+            var grado = document.getElementById('grado').value;
+            var duracion = document.getElementById('duracion').value;
+            var periodo = document.getElementById('periodo').value;
+            var edadPromedio = document.getElementById('edadPromedio').value;
+            var numeroSecuencia = document.getElementById('numeroSecuencia').value;
+            var compLaboral = document.getElementById('compLaboral').value;
+            var compCiudadana = document.getElementById('compCiudadana').value;
+            var compSocioemocional = document.getElementById('compSocioemocional').value;
+            var usarIA = document.getElementById('usarIA').value;
+
+            if (!tema || !grado || !duracion || !periodo || !edadPromedio || !numeroSecuencia || !compLaboral || !compCiudadana || !compSocioemocional) {
+                alert('⚠️ Por favor complete todos los campos');
+                return;
+            }
+
+            if (numeroSecuencia < 1 || numeroSecuencia > 20) {
+                alert('⚠️ El número de secuencia debe estar entre 1 y 20');
+                return;
+            }
+
+            // Mostrar mensaje de carga
+            var btnGenerar = event.target;
+            var textoOriginal = btnGenerar.innerHTML;
+            btnGenerar.disabled = true;
+
+            var contenidoIA = null;
+            
+            if (usarIA === 'con-ia') {
+                btnGenerar.innerHTML = '🤖 Generando con Claude IA... Por favor espera...';
+                contenidoIA = await generarConClaudeIA(tema, grado, duracion, edadPromedio, numeroSecuencia);
+                
+                if (!contenidoIA) {
+                    btnGenerar.innerHTML = textoOriginal;
+                    btnGenerar.disabled = false;
+                    return; // Si falla la IA, no continuar
+                }
+            } else {
+                btnGenerar.innerHTML = '✨ Generando planeación...';
+            }
+
+            // Generar HTML con o sin IA
+            generarHTML(tema, grado, duracion, periodo, edadPromedio, numeroSecuencia, 
+                        compLaboral, compCiudadana, compSocioemocional, contenidoIA);
+
+            btnGenerar.innerHTML = textoOriginal;
+            btnGenerar.disabled = false;
+        }
+
+        function generarHTML(tema, grado, duracion, periodo, edadPromedio, numeroSecuencia, 
+                            compLaboral, compCiudadana, compSocioemocional, contenidoIA) {
+
+            var html = '';
+            
+            html += '<div style="text-align: center; margin-bottom: 15px;">';
+            html += '<img src="https://i.imgur.com/JYSeHia.png" alt="Logo IE La Pascuala" width="100" height="100" style="margin-bottom: 8px;" id="escudoLogo">';
+            html += '<h1 style="color: #2d3561; margin: 5px 0;">Institución Educativa La Pascuala</h1>';
+            html += '<h2 style="color: #4a5899; font-size: 1.2em; margin: 3px 0;">Secuencia Didáctica</h2>';
+            html += '</div>';
+
+            html += '<h2 style="margin-top: 10px; margin-bottom: 5px;">📋 INFORMACIÓN GENERAL</h2>';
+            html += '<table style="margin: 5px 0;">';
+            html += '<tr><th style="padding: 4px 8px; width: 35%;">Campo</th><th style="padding: 4px 8px;">Detalle</th></tr>';
+            html += '<tr><td style="padding: 3px 8px;"><strong>Docente</strong></td><td style="padding: 3px 8px;">Mag. Francisco Javier Amell</td></tr>';
+            html += '<tr><td style="padding: 3px 8px;"><strong>Área</strong></td><td style="padding: 3px 8px;">Tecnología e Informática</td></tr>';
+            html += '<tr><td style="padding: 3px 8px;"><strong>Tema</strong></td><td style="padding: 3px 8px;">' + tema + '</td></tr>';
+            html += '<tr><td style="padding: 3px 8px;"><strong>Grado</strong></td><td style="padding: 3px 8px;">' + grado + '</td></tr>';
+            html += '<tr><td style="padding: 3px 8px;"><strong>Edad Promedio</strong></td><td style="padding: 3px 8px;">' + edadPromedio + ' años</td></tr>';
+            html += '<tr><td style="padding: 3px 8px;"><strong>Número de Secuencia</strong></td><td style="padding: 3px 8px;">' + numeroSecuencia + '</td></tr>';
+            html += '<tr><td style="padding: 3px 8px;"><strong>Duración</strong></td><td style="padding: 3px 8px;">' + duracion + ' horas</td></tr>';
+            html += '<tr><td style="padding: 3px 8px;"><strong>Periodo</strong></td><td style="padding: 3px 8px;">' + periodo + '</td></tr>';
+            html += '<tr><td style="padding: 3px 8px;"><strong>Enfoque Pedagógico</strong></td><td style="padding: 3px 8px;">Enseñanza para la Comprensión (EPC)</td></tr>';
+            html += '</table>';
+
+            html += '<h2>🎯 COMPETENCIAS TRANSVERSALES</h2>';
+            html += '<table>';
+            html += '<tr><th>Tipo</th><th>Descripción</th></tr>';
+            html += '<tr><td><strong>Laboral</strong></td><td>' + formatearCompetencia(compLaboral) + '</td></tr>';
+            html += '<tr><td><strong>Ciudadana</strong></td><td>' + formatearCompetencia(compCiudadana) + '</td></tr>';
+            html += '<tr><td><strong>Socioemocional</strong></td><td>' + formatearCompetencia(compSocioemocional) + '</td></tr>';
+            html += '</table>';
+
+            html += '<h2>💡 TÓPICO GENERATIVO</h2>';
+            var topicoTitulo = contenidoIA ? contenidoIA.topicoTitulo : ('✨ ' + tema + ': Una Puerta al Futuro');
+            var topicoPregunta = contenidoIA ? contenidoIA.topicoPregunta : ('¿Cómo puede ' + tema + ' transformar mi realidad y la de mi comunidad?');
+            
+            html += '<p><strong>Título:</strong> ' + topicoTitulo + '</p>';
+            html += '<p><strong>Pregunta Esencial:</strong> ' + topicoPregunta + '</p>';
+            html += '<p style="background: #f0f4ff; padding: 15px; border-radius: 8px; margin-top: 10px;">';
+            html += '<strong>Justificación:</strong> Este tópico es generativo porque conecta con la realidad inmediata del estudiante, ';
+            html += 'genera curiosidad, permite múltiples abordajes y tiene aplicación práctica en su contexto.';
+            html += '</p>';
+
+            html += '<h2>🧵 HILOS CONDUCTORES</h2>';
+            html += '<p><em>Preguntas abarcadoras que guían todo el año escolar:</em></p>';
+            html += '<ul>';
+            html += '<li>¿Cómo ha evolucionado la tecnología y qué significa para nosotros hoy?</li>';
+            html += '<li>¿De qué manera puedo usar la tecnología para resolver problemas reales de mi entorno?</li>';
+            html += '<li>¿Qué responsabilidad tengo como usuario de tecnología en mi comunidad?</li>';
+            html += '<li>¿Cómo puedo ser crítico y creativo con las herramientas tecnológicas disponibles?</li>';
+            html += '</ul>';
+
+            html += '<h2>🎓 METAS DE COMPRENSIÓN</h2>';
+            html += '<ul>';
+            if (contenidoIA && contenidoIA.metas) {
+                contenidoIA.metas.forEach(function(meta) {
+                    html += '<li>' + meta + '</li>';
+                });
+            } else {
+                html += '<li>Que el estudiante comprenda la evolución histórica y el impacto social de ' + tema + ' en diferentes contextos.</li>';
+                html += '<li>Que el estudiante comprenda cómo utilizar ' + tema + ' de manera práctica para resolver problemas de su vida cotidiana.</li>';
+                html += '<li>Que el estudiante comprenda las implicaciones éticas, sociales y ambientales del uso de ' + tema + '.</li>';
+                html += '<li>Que el estudiante comprenda los principios básicos de funcionamiento de ' + tema + ' y pueda explicarlos con sus propias palabras.</li>';
+            }
+            html += '</ul>';
+
+            html += '<h2>📚 COMPETENCIAS ESPECÍFICAS DEL MEN (Tecnología e Informática)</h2>';
+            html += '<table>';
+            html += '<tr><th>Componente</th><th>Competencia</th></tr>';
+            html += '<tr><td><strong>Naturaleza y Evolución de la Tecnología</strong></td>';
+            html += '<td>Reconocer y analizar la evolución histórica de ' + tema + ', identificando sus cambios a lo largo del tiempo y comprendiendo cómo surgió para satisfacer necesidades humanas.</td></tr>';
+            html += '<tr><td><strong>Apropiación y Uso de la Tecnología</strong></td>';
+            html += '<td>Utilizar ' + tema + ' de manera adecuada y eficiente para realizar tareas específicas, siguiendo instrucciones y aplicando técnicas apropiadas según el contexto.</td></tr>';
+            html += '<tr><td><strong>Solución de Problemas con Tecnología</strong></td>';
+            html += '<td>Identificar problemas de su entorno cercano y proponer soluciones prácticas utilizando ' + tema + ', demostrando creatividad y pensamiento crítico.</td></tr>';
+            html += '<tr><td><strong>Tecnología y Sociedad</strong></td>';
+            html += '<td>Reflexionar sobre el impacto social, ambiental y ético de ' + tema + ', reconociendo ventajas, desventajas y responsabilidades como usuarios en su comunidad.</td></tr>';
+            html += '</table>';
+
+            var minExploracion = Math.floor(duracion * 60 * 0.2);
+            var minInvestigacion = Math.floor(duracion * 60 * 0.5);
+            var minSintesis = Math.floor(duracion * 60 * 0.3);
+
+            html += '<h2>📖 SECUENCIA DIDÁCTICA (Desempeños de Comprensión)</h2>';
+            
+            html += '<h3>🔍 FASE 1: ETAPA EXPLORATORIA [' + minExploracion + ' min]</h3>';
+            html += '<p><strong>Objetivo:</strong> Detectar saberes previos y generar interés</p>';
+            html += '<p><strong>Actividad: "¿Qué sabemos y qué queremos saber?"</strong></p>';
+            html += '<ul>';
+            html += '<li><strong>Inicio:</strong> Presentar una situación problema real del contexto de La Pascuala relacionada con ' + tema + '.</li>';
+            html += '<li><strong>Desarrollo:</strong> En grupos pequeños (3-4 estudiantes), los estudiantes discuten: ¿Qué sabemos sobre ' + tema + '? ¿Dónde lo hemos visto o usado? ¿Para qué sirve en nuestra comunidad?</li>';
+            html += '<li><strong>Socialización:</strong> Cada grupo comparte 2-3 ideas principales en plenaria.</li>';
+            html += '<li><strong>Registro:</strong> El docente crea un mapa mental colectivo en el tablero con las ideas previas.</li>';
+            html += '</ul>';
+            html += '<p style="background: #f0f4ff; padding: 10px; border-radius: 5px; margin-top: 10px;">';
+            html += '<strong>💡 Adaptación:</strong> Para estudiantes con ritmo lento, permitir usar dibujos o imágenes en lugar de texto extenso.';
+            html += '</p>';
+
+            html += '<h3>🔬 FASE 2: INVESTIGACIÓN GUIADA [' + minInvestigacion + ' min]</h3>';
+            html += '<p><strong>Objetivo:</strong> Profundizar en el tema con actividades progresivas</p>';
+            
+            html += '<h4>Actividad 1: "Explorando la Historia" [' + Math.floor(minInvestigacion * 0.3) + ' min]</h4>';
+            html += '<ul>';
+            html += '<li>Presentación visual (láminas, fotos impresas o proyección si hay recursos) sobre la evolución de ' + tema + '.</li>';
+            html += '<li>Los estudiantes crean una línea de tiempo simple en sus cuadernos identificando 3-5 momentos clave.</li>';
+            html += '<li>Pregunta guía: ¿Cómo era antes y cómo es ahora? ¿Qué cambió?</li>';
+            html += '<li><strong>Recurso:</strong> Material impreso con imágenes (adaptado a recursos limitados).</li>';
+            html += '</ul>';
+
+            html += '<h4>Actividad 2: "Manos a la Obra - Práctica Guiada" [' + Math.floor(minInvestigacion * 0.4) + ' min]</h4>';
+            html += '<ul>';
+            html += '<li>Actividad práctica donde los estudiantes interactúan directamente con ' + tema + ' (si es posible) o simulan su uso.</li>';
+            html += '<li><strong>Ejemplos según recursos:</strong> Si es sobre herramientas: Traer herramientas reales y experimentar. Si es sobre software/apps: Usar una computadora o celular en grupos rotativos. Si no hay recursos: Realizar dramatizaciones o juegos de roles.</li>';
+            html += '<li>Los estudiantes completan una guía práctica con observaciones y conclusiones.</li>';
+            html += '</ul>';
+
+            html += '<h4>Actividad 3: "Análisis Crítico" [' + Math.floor(minInvestigacion * 0.3) + ' min]</h4>';
+            html += '<ul>';
+            html += '<li>Debate grupal estructurado con preguntas provocadoras: ¿Quién se beneficia más de ' + tema + '? ¿Qué problemas puede causar su mal uso? ¿Cómo podemos usarlo de manera responsable en La Pascuala?</li>';
+            html += '<li>Cada estudiante escribe en su cuaderno 2 ventajas y 2 desventajas identificadas.</li>';
+            html += '<li>Se construye colectivamente un "Decálogo de Uso Responsable".</li>';
+            html += '</ul>';
+            html += '<p style="background: #f0f4ff; padding: 10px; border-radius: 5px; margin-top: 10px;">';
+            html += '<strong>💡 Adaptación:</strong> Ofrecer roles específicos en el debate (moderador, observador, participante) según capacidades.';
+            html += '</p>';
+
+            html += '<h3>🎯 FASE 3: PROYECTO FINAL DE SÍNTESIS [' + minSintesis + ' min]</h3>';
+            html += '<p><strong>Objetivo:</strong> Demostrar comprensión aplicada a un contexto real</p>';
+            html += '<p><strong>Proyecto: "Solución Tecnológica para mi Comunidad"</strong></p>';
+            html += '<ul>';
+            html += '<li>Los estudiantes (individual o en parejas) identifican un problema real de su entorno que pueda relacionarse con ' + tema + '.</li>';
+            html += '<li><strong>Productos a elegir:</strong> Cartelera educativa, prototipo simple o maqueta (con materiales reciclados), presentación oral con apoyo visual, o folleto informativo para la comunidad.</li>';
+            html += '<li><strong>Requisitos del proyecto:</strong> Describir el problema identificado, explicar cómo ' + tema + ' ayuda a resolverlo, incluir recomendaciones de uso responsable, presentar en clase (5 min por grupo).</li>';
+            html += '</ul>';
+            html += '<p style="background: #fff3cd; padding: 10px; border-radius: 5px; border-left: 4px solid #856404; margin-top: 10px;">';
+            html += '<strong>⚠️ Importante:</strong> El proyecto debe ser realizable con los recursos disponibles en La Pascuala. Priorizar la creatividad y el pensamiento crítico sobre la sofisticación técnica.';
+            html += '</p>';
+
+            html += '<h2>✅ EVALUACIÓN CONTINUA (Valoración Continua)</h2>';
+            html += '<table>';
+            html += '<tr><th style="width: 20%;">Fase</th><th style="width: 40%;">Criterios de Evaluación</th><th style="width: 40%;">Estrategia</th></tr>';
+            html += '<tr><td><strong>Exploratoria</strong></td>';
+            html += '<td><ul style="margin: 0; padding-left: 20px;"><li>Participación activa en la discusión grupal.</li><li>Capacidad de expresar ideas previas con claridad.</li><li>Escucha respetuosa de las opiniones de otros.</li></ul></td>';
+            html += '<td><strong>Observación directa + Autoevaluación oral:</strong><br>"¿Qué aprendí de mis compañeros? ¿Participé activamente?"</td></tr>';
+            html += '<tr><td><strong>Investigación Guiada</strong></td>';
+            html += '<td><ul style="margin: 0; padding-left: 20px;"><li>Comprensión de la evolución histórica (línea de tiempo).</li><li>Habilidad práctica demostrada en la actividad.</li><li>Capacidad de análisis crítico (ventajas/desventajas).</li><li>Calidad de las preguntas formuladas.</li></ul></td>';
+            html += '<td><strong>Coevaluación + Rúbrica formativa:</strong><br>Evaluación entre pares de la actividad práctica. Retroalimentación del docente sobre el cuaderno y participación.</td></tr>';
+            html += '<tr><td><strong>Proyecto Final</strong></td>';
+            html += '<td><ul style="margin: 0; padding-left: 20px;"><li>Pertinencia del problema identificado.</li><li>Creatividad en la solución propuesta.</li><li>Claridad en la comunicación (oral/visual).</li><li>Inclusión de reflexión ética y social.</li><li>Trabajo colaborativo (si aplica).</li></ul></td>';
+            html += '<td><strong>Rúbrica de proyecto (4 niveles) + Autoevaluación escrita:</strong><br>Niveles: Inicial, Básico, Satisfactorio, Avanzado<br>El estudiante reflexiona por escrito: "¿Qué fue lo más difícil? ¿Qué aprendí? ¿Cómo puedo mejorar?"</td></tr>';
+            html += '</table>';
+            html += '<p style="background: #e7f3ff; padding: 15px; border-radius: 8px; margin-top: 15px;">';
+            html += '<strong>📌 Nota sobre evaluación formativa:</strong> La evaluación es continua y busca identificar fortalezas y áreas de mejora. Se prioriza la retroalimentación constructiva sobre la calificación numérica. Se valora el esfuerzo, la creatividad y el progreso individual de cada estudiante.';
+            html += '</p>';
+
+            html += '<h2>♿ ADAPTACIONES INCLUSIVAS</h2>';
+            html += '<p style="background: #fff3cd; padding: 15px; border-radius: 8px; border-left: 4px solid #856404;">';
+            html += '<strong>Para estudiantes con ritmos de aprendizaje lentos o dificultades cognitivas:</strong>';
+            html += '</p>';
+            html += '<ul>';
+            html += '<li><strong>Tiempo extendido:</strong> Permitir tiempo adicional para completar actividades y proyectos según el ritmo individual.</li>';
+            html += '<li><strong>Instrucciones visuales:</strong> Complementar instrucciones verbales con diagramas, imágenes o demostraciones prácticas.</li>';
+            html += '<li><strong>Actividades graduadas:</strong> Ofrecer versiones simplificadas de las tareas manteniendo los objetivos de aprendizaje (menos pasos, vocabulario más simple).</li>';
+            html += '<li><strong>Apoyo entre pares:</strong> Formar parejas o grupos heterogéneos donde estudiantes más avanzados puedan apoyar.</li>';
+            html += '<li><strong>Productos alternativos:</strong> Permitir expresar comprensión mediante dibujos, maquetas, presentaciones orales breves o dramatizaciones en lugar de textos extensos.</li>';
+            html += '<li><strong>Checklists y guías:</strong> Proporcionar listas de verificación paso a paso para actividades complejas.</li>';
+            html += '<li><strong>Refuerzo positivo constante:</strong> Celebrar pequeños logros y avances, construyendo confianza y motivación.</li>';
+            html += '<li><strong>Evaluación flexible:</strong> Evaluar el progreso individual más que la comparación con el grupo, valorando el esfuerzo y la mejora continua.</li>';
+            html += '<li><strong>Recursos multisensoriales:</strong> Combinar materiales manipulables, visuales, auditivos según las fortalezas del estudiante.</li>';
+            html += '<li><strong>Sesiones de repaso:</strong> Ofrecer momentos de retroalimentación individual o en pequeños grupos para aclarar conceptos.</li>';
+            html += '</ul>';
+
+            html += '<h2>🏫 CONTEXTO INSTITUCIONAL</h2>';
+            html += '<p style="background: #e7f3ff; padding: 15px; border-radius: 8px;">';
+            html += '<strong>I.E. La Pascuala</strong> se caracteriza por:';
+            html += '<ul style="margin-top: 10px;">';
+            html += '<li>Contexto de alta vulnerabilidad socioeconómica</li>';
+            html += '<li>Recursos tecnológicos limitados (enfoque en actividades prácticas y accesibles)</li>';
+            html += '<li>Énfasis en la aplicabilidad inmediata al contexto rural/urbano del estudiante</li>';
+            html += '<li>Desarrollo de pensamiento crítico frente a la tecnología</li>';
+            html += '</ul>';
+            html += '</p>';
+
+            document.getElementById('contenido').innerHTML = html;
+            document.getElementById('resultado').classList.add('mostrar');
+            
+            // Cargar el escudo local si está disponible
+            cargarEscudoLocal();
+            
+            document.getElementById('resultado').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function cargarEscudoLocal() {
+            // Cargar el escudo local subido por el usuario
+            var escudoImg = document.getElementById('escudoLogo');
+            if (escudoImg) {
+                // Intentar cargar desde el archivo local
+                fetch('./escudo_lapascuala.png')
+                    .then(response => response.blob())
+                    .then(blob => {
+                        var reader = new FileReader();
+                        reader.onloadend = function() {
+                            escudoImg.src = reader.result;
+                        };
+                        reader.readAsDataURL(blob);
+                    })
+                    .catch(() => {
+                        // Si falla, mantener la imagen por defecto
+                        console.log('Usando escudo por defecto');
+                    });
+            }
+        }
+
+        function descargarWord() {
+            var contenido = document.getElementById('contenido').cloneNode(true);
+            
+            // Reemplazar la imagen con una versión base64 del escudo local
+            var escudoImg = contenido.querySelector('#escudoLogo');
+            if (escudoImg) {
+                // Intentar obtener el escudo del canvas
+                fetch('./escudo_lapascuala.png')
+                    .then(response => response.blob())
+                    .then(blob => {
+                        var reader = new FileReader();
+                        reader.onloadend = function() {
+                            escudoImg.src = reader.result;
+                            generarDocWord(contenido.innerHTML);
+                        };
+                        reader.readAsDataURL(blob);
+                    })
+                    .catch(() => {
+                        // Si falla, usar el de imgur
+                        generarDocWord(contenido.innerHTML);
+                    });
+            } else {
+                generarDocWord(contenido.innerHTML);
+            }
+        }
+
+        function generarDocWord(html) {
+            // Crear un documento HTML completo con mejor formato
+            var htmlCompleto = `<!DOCTYPE html>
+<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+<head>
+<meta charset='utf-8'>
+<title>Planeación EPC</title>
+<style>
+@page {
+    margin-top: 0.5cm;
+    margin-bottom: 1cm;
+    margin-left: 1.5cm;
+    margin-right: 1.5cm;
+}
+body { 
+    font-family: Calibri, Arial, sans-serif; 
+    line-height: 1.3; 
+    padding: 0;
+    margin: 0;
+    font-size: 11pt;
+}
+h1 { 
+    color: #2d3561; 
+    text-align: center; 
+    font-size: 16pt;
+    margin-bottom: 5px;
+    margin-top: 0;
+}
+h2 { 
+    color: #2d3561; 
+    margin-top: 10px;
+    margin-bottom: 5px;
+    border-bottom: 2px solid #667eea; 
+    padding-bottom: 2px;
+    font-size: 13pt;
+}
+h3 { 
+    color: #4a5899; 
+    margin-top: 10px;
+    margin-bottom: 5px;
+    font-size: 12pt;
+}
+h4 {
+    color: #667eea;
+    margin-top: 7px;
+    margin-bottom: 4px;
+    font-size: 11pt;
+}
+table { 
+    width: 100%; 
+    border-collapse: collapse; 
+    margin: 5px 0;
+    page-break-inside: avoid;
+    font-size: 11pt;
+}
+th { 
+    background-color: #667eea; 
+    color: white; 
+    padding: 3px 6px; 
+    text-align: left;
+    border: 1px solid #333;
+}
+td { 
+    border: 1px solid #ccc; 
+    padding: 2px 6px;
+    line-height: 1.2;
+}
+tr:nth-child(even) {
+    background-color: #f5f5f5;
+}
+ul { 
+    margin-left: 15px;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+li { 
+    margin-bottom: 2px;
+    line-height: 1.2;
+}
+p {
+    margin: 6px 0;
+    line-height: 1.3;
+}
+img {
+    width: 100px;
+    height: 100px;
+    display: block;
+    margin: 0 auto 5px auto;
+}
+div {
+    margin-bottom: 8px;
+}
+div:first-child {
+    margin-top: 0;
+    padding-top: 0;
+}
+</style>
+</head>
+<body>` + html + `</body></html>`;
+            
+            // Crear blob y descargar
+            var blob = new Blob(['\ufeff', htmlCompleto], {
+                type: 'application/msword'
+            });
+            
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = 'Planeacion_EPC_' + document.getElementById('tema').value.replace(/[^a-z0-9]/gi, '_') + '.doc';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            
+            alert('✅ Documento Word descargado. Ábrelo en Microsoft Word o Google Docs.');
+        }
+
+        function descargarPDF() {
+            var elemento = document.getElementById('contenido');
+            
+            // Mostrar mensaje de espera
+            var btnPDF = event.target;
+            var textoOriginal = btnPDF.innerHTML;
+            btnPDF.innerHTML = '⏳ Generando PDF...';
+            btnPDF.disabled = true;
+            
+            // Esperar un momento para que se actualice el UI
+            setTimeout(function() {
+                html2canvas(elemento, {
+                    scale: 2,
+                    logging: false,
+                    useCORS: true,
+                    allowTaint: true,
+                    backgroundColor: '#ffffff'
+                }).then(function(canvas) {
+                    try {
+                        var imgData = canvas.toDataURL('image/jpeg', 0.95);
+                        var imgWidth = 210; // A4 ancho en mm
+                        var pageHeight = 297; // A4 alto en mm
+                        var imgHeight = canvas.height * imgWidth / canvas.width;
+                        var heightLeft = imgHeight;
+                        var position = 0;
+                        
+                        var { jsPDF } = window.jspdf;
+                        var pdf = new jsPDF('p', 'mm', 'a4');
+                        
+                        // Primera página
+                        pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+                        heightLeft -= pageHeight;
+                        
+                        // Páginas adicionales si es necesario
+                        while (heightLeft >= 0) {
+                            position = heightLeft - imgHeight;
+                            pdf.addPage();
+                            pdf.addImage(imgData, 'JPEG', 0, position, imgWidth, imgHeight);
+                            heightLeft -= pageHeight;
+                        }
+                        
+                        // Guardar el PDF
+                        var nombreArchivo = 'Planeacion_EPC_' + document.getElementById('tema').value.replace(/[^a-z0-9]/gi, '_') + '.pdf';
+                        pdf.save(nombreArchivo);
+                        
+                        btnPDF.innerHTML = textoOriginal;
+                        btnPDF.disabled = false;
+                        alert('✅ PDF descargado exitosamente');
+                    } catch(error) {
+                        btnPDF.innerHTML = textoOriginal;
+                        btnPDF.disabled = false;
+                        console.error('Error al generar PDF:', error);
+                        alert('❌ Error al generar PDF. Por favor use la opción "Imprimir" y luego "Guardar como PDF" desde el diálogo de impresión de su navegador.');
+                    }
+                }).catch(function(error) {
+                    btnPDF.innerHTML = textoOriginal;
+                    btnPDF.disabled = false;
+                    console.error('Error en html2canvas:', error);
+                    alert('❌ Error al generar PDF. Por favor use la opción "Imprimir" y luego "Guardar como PDF" desde el diálogo de impresión de su navegador.');
+                });
+            }, 100);
+        }
+
+        function copiar() {
+            var texto = document.getElementById('contenido').innerText;
+            navigator.clipboard.writeText(texto).then(function() {
+                alert('✅ Planeación copiada al portapapeles');
+            }).catch(function() {
+                alert('❌ Error al copiar. Selecciona el texto manualmente con Ctrl+A y Ctrl+C');
+            });
+        }
+
+        function nuevo() {
+            document.getElementById('tema').value = '';
+            document.getElementById('grado').value = '';
+            document.getElementById('duracion').value = '';
+            document.getElementById('periodo').value = '';
+            document.getElementById('edadPromedio').value = '';
+            document.getElementById('numeroSecuencia').value = '';
+            document.getElementById('compLaboral').value = '';
+            document.getElementById('compCiudadana').value = '';
+            document.getElementById('compSocioemocional').value = '';
+            document.getElementById('resultado').classList.remove('mostrar');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
