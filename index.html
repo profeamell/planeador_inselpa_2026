@@ -555,7 +555,7 @@ Responde SOLO en formato JSON:
             var html = '';
             
             html += '<div style="text-align: center; margin-bottom: 15px;">';
-            html += '<img src="escudo_lapascuala.png" alt="Logo IE La Pascuala" width="100" height="100" style="margin-bottom: 8px;" id="escudoLogo">';
+            html += '<img src="escudo_lapascuala.png" alt="Logo IE La Pascuala" width="100" height="100" style="width: 100px !important; height: 100px !important; max-width: 100px !important; max-height: 100px !important; margin-bottom: 8px; display: block; margin-left: auto; margin-right: auto;" id="escudoLogo">';
             html += '<h1 style="color: #2d3561; margin: 5px 0;">Institución Educativa La Pascuala</h1>';
             html += '<h2 style="color: #4a5899; font-size: 1.2em; margin: 3px 0;">Secuencia Didáctica</h2>';
             html += '</div>';
@@ -873,10 +873,18 @@ p {
     line-height: 1.3;
 }
 img {
-    width: 100px;
-    height: 100px;
+    width: 100px !important;
+    height: 100px !important;
+    max-width: 100px !important;
+    max-height: 100px !important;
     display: block;
     margin: 0 auto 5px auto;
+}
+#escudoLogo {
+    width: 100px !important;
+    height: 100px !important;
+    max-width: 100px !important;
+    max-height: 100px !important;
 }
 div {
     margin-bottom: 8px;
