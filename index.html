@@ -502,53 +502,58 @@ Responde SOLO en formato JSON:
         }
 
         async function generarPlaneacion() {
-            var tema = document.getElementById('tema').value;
-            var grado = document.getElementById('grado').value;
-            var duracion = document.getElementById('duracion').value;
-            var periodo = document.getElementById('periodo').value;
-            var edadPromedio = document.getElementById('edadPromedio').value;
-            var numeroSecuencia = document.getElementById('numeroSecuencia').value;
-            var compLaboral = document.getElementById('compLaboral').value;
-            var compCiudadana = document.getElementById('compCiudadana').value;
-            var compSocioemocional = document.getElementById('compSocioemocional').value;
-            var usarIA = document.getElementById('usarIA').value;
+            try {
+                var tema = document.getElementById('tema').value;
+                var grado = document.getElementById('grado').value;
+                var duracion = document.getElementById('duracion').value;
+                var periodo = document.getElementById('periodo').value;
+                var edadPromedio = document.getElementById('edadPromedio').value;
+                var numeroSecuencia = document.getElementById('numeroSecuencia').value;
+                var compLaboral = document.getElementById('compLaboral').value;
+                var compCiudadana = document.getElementById('compCiudadana').value;
+                var compSocioemocional = document.getElementById('compSocioemocional').value;
+                var usarIA = document.getElementById('usarIA').value;
 
-            if (!tema || !grado || !duracion || !periodo || !edadPromedio || !numeroSecuencia || !compLaboral || !compCiudadana || !compSocioemocional) {
-                alert('⚠️ Por favor complete todos los campos');
-                return;
-            }
-
-            if (numeroSecuencia < 1 || numeroSecuencia > 20) {
-                alert('⚠️ El número de secuencia debe estar entre 1 y 20');
-                return;
-            }
-
-            // Mostrar mensaje de carga
-            var btnGenerar = event.target;
-            var textoOriginal = btnGenerar.innerHTML;
-            btnGenerar.disabled = true;
-
-            var contenidoIA = null;
-            
-            if (usarIA === 'con-ia') {
-                btnGenerar.innerHTML = '🤖 Generando con Claude IA... Por favor espera...';
-                contenidoIA = await generarConClaudeIA(tema, grado, duracion, edadPromedio, numeroSecuencia);
-                
-                if (!contenidoIA) {
-                    btnGenerar.innerHTML = textoOriginal;
-                    btnGenerar.disabled = false;
-                    return; // Si falla la IA, no continuar
+                if (!tema || !grado || !duracion || !periodo || !edadPromedio || !numeroSecuencia || !compLaboral || !compCiudadana || !compSocioemocional) {
+                    alert('⚠️ Por favor complete todos los campos obligatorios');
+                    return;
                 }
-            } else {
-                btnGenerar.innerHTML = '✨ Generando planeación...';
+
+                if (numeroSecuencia < 1 || numeroSecuencia > 20) {
+                    alert('⚠️ El número de secuencia debe estar entre 1 y 20');
+                    return;
+                }
+
+                // Mostrar mensaje de carga
+                var btnGenerar = document.querySelector('.btn');
+                var textoOriginal = btnGenerar.innerHTML;
+                btnGenerar.disabled = true;
+
+                var contenidoIA = null;
+                
+                if (usarIA === 'con-ia') {
+                    btnGenerar.innerHTML = '🤖 Generando con Claude IA... Por favor espera...';
+                    contenidoIA = await generarConClaudeIA(tema, grado, duracion, edadPromedio, numeroSecuencia);
+                    
+                    if (!contenidoIA) {
+                        btnGenerar.innerHTML = textoOriginal;
+                        btnGenerar.disabled = false;
+                        return; // Si falla la IA, no continuar
+                    }
+                } else {
+                    btnGenerar.innerHTML = '✨ Generando planeación...';
+                }
+
+                // Generar HTML con o sin IA
+                generarHTML(tema, grado, duracion, periodo, edadPromedio, numeroSecuencia, 
+                            compLaboral, compCiudadana, compSocioemocional, contenidoIA);
+
+                btnGenerar.innerHTML = textoOriginal;
+                btnGenerar.disabled = false;
+            } catch (error) {
+                console.error('Error en generarPlaneacion:', error);
+                alert('❌ Error al generar planeación: ' + error.message);
             }
-
-            // Generar HTML con o sin IA
-            generarHTML(tema, grado, duracion, periodo, edadPromedio, numeroSecuencia, 
-                        compLaboral, compCiudadana, compSocioemocional, contenidoIA);
-
-            btnGenerar.innerHTML = textoOriginal;
-            btnGenerar.disabled = false;
         }
 
         function generarHTML(tema, grado, duracion, periodo, edadPromedio, numeroSecuencia, 
